@@ -1,0 +1,12 @@
+/* RTL Support */
+body, .stApp {
+    direction: rtl;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+/* Buttons */
+.stButton>button {
+    border-radius: 8px;
+    margin-top: 10px;
+}
