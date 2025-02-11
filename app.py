@@ -1,44 +1,8 @@
+from utils import load_css, login_check, switch_page, signup_user
 import streamlit as st
-from db import DatabaseManager
 
-# Load external CSS
-def load_css():
-    css_file = open('styles/main_style.css').read()
-    st.markdown(f"""
-        <style>
-            {css_file}
-        </style>
-    """, unsafe_allow_html=True)
-
-# Function to toggle pages
-def switch_page():
-    if st.session_state.page == "signin":
-        st.session_state.page = "signup"
-    else:
-        st.session_state.page = "signin"
-
-# Login function
-def login_check(username, password):
-    db = DatabaseManager()
-    if db.signin(username, password):
-        st.success('در حال ورود به حساب ...')
-    else:
-        st.error('نام کاربری یا رمز عبور اشتباه است.')
-
-def signup_user(username, password, confirm_password):
-    if password == confirm_password:
-        db = DatabaseManager()
-        if not db.user_exist(username):
-            if db.signup(username, password):
-                st.success('ثبت نام با موفقیت انجام شد.')
-            else:
-                st.error('ثبت نام انجام نشد, لطفامجددا امتحان کنید.')
-        else:
-            st.error('این ایمیل قبلا استفاده شده است.')
-    else:
-        st.error('رمز عبور و تکرار آن تطابق ندارند.')
-
-# Apply CSS
+# Initial settings
+st.set_page_config(page_title="کافی من", page_icon="☕️")
 load_css()
 
 # Initialize session state for page toggle
@@ -58,7 +22,7 @@ with st.container():
         password = st.text_input("رمز عبور", type="password", key="password_signin")
         if st.button("ورود"):
             if login_check(email, password):
-                pass
+                st.switch_page('pages/salesman.py')
 
         if st.button("حساب کاربری ندارید؟"):
             switch_page()

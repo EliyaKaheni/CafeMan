@@ -1,5 +1,4 @@
 import mysql.connector
-from utils import hash
 
 class DatabaseManager:
     def __init__(self):
@@ -29,12 +28,10 @@ class DatabaseManager:
 
     def signup(self, username:str, password:str) -> bool:
         query = 'INSERT INTO users (username, password) VALUES (%s, %s)'
-        try:
-            hashed_password = hash(password)
-            
+        try:            
             self.connect()
             cursor = self.connection.cursor()
-            cursor.execute(query, (username, hashed_password))
+            cursor.execute(query, (username, password))
             self.connection.commit()
 
             return True
@@ -50,10 +47,9 @@ class DatabaseManager:
     def signin(self, username:str, password:str) -> bool:
         query = "SELECT * FROM users WHERE username = %s AND password = %s"
         try:
-            hashed_password = hash(password)
             self.connect()
             cursor = self.connection.cursor(dictionary=True)
-            cursor.execute(query, (username, hashed_password))
+            cursor.execute(query, (username, password))
             user = cursor.fetchone()
             return user is not None
     
